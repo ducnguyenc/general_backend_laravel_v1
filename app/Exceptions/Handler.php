@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -45,6 +47,16 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (Throwable $e, $request) {
+            if ($request->is('api/*') && !env('APP_DEBUG')) {
+                return response()->json([
+                    'status' => 'Client error',
+                    'data' => [],
+                    'message' => $e->getMessage(),
+                ], $e->getCode());
+            }
         });
     }
 }

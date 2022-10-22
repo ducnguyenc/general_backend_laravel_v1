@@ -1,0 +1,9 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Services\BaseService;
+
+class {{ class }} extends BaseService implements {{ interface }}
+{
+}
