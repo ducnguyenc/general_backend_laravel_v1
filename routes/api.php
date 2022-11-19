@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Api\V1\User\AuthController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +19,6 @@ use Illuminate\Support\Facades\Password;
 */
 
 Route::middleware(['auth:sanctum', 'ability:user'])->group(function () {
-    // email register
-    Route::controller(AuthController::class)->group(function () {
-        Route::get('/email/verify/{id}/{hash}', 'verify')->middleware('signed')->name('verification.verify');
-        Route::get('/email/verification-notification', 'send')->middleware('throttle:6,1')->name('verification.send');
-    });
-
     // verified
     Route::middleware(['verified'])->group(function () {
         Route::get('/profile', function () {
@@ -33,18 +29,21 @@ Route::middleware(['auth:sanctum', 'ability:user'])->group(function () {
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register');
+    Route::post('/login', 'login');
+    Route::get('/email/verify/{id}/{hash}', 'verify')->middleware('signed')->name('verification.verify');
+    Route::get('/email/verification-notification', 'send')->middleware('throttle:6,1')->name('verification.send');
 });
 
 Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
- 
+
     $status = Password::sendResetLink(
         $request->only('email')
     );
- 
+
     return response()->json(['status' => $status], 200);
 })->middleware('guest')->name('password.email');
 
 Route::get('/reset-password/{token}', function ($token) {
-    return env('APP_URL_FE') . config('const.uri_fe.reset-password') . '/' . $token;
+    return redirect()->to(env('APP_URL_FE') . config('const.uri_fe.reset-password') . '/' . $token);
 })->middleware('guest')->name('password.reset');

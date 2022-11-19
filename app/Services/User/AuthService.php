@@ -7,7 +7,9 @@ use App\Repositories\UserRepositoryInterface;
 use App\Services\BaseService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class AuthService extends BaseService implements AuthServiceInterface
@@ -23,13 +25,17 @@ class AuthService extends BaseService implements AuthServiceInterface
     {
         DB::beginTransaction();
         try {
-            $user = $this->userRepo->create([
-                'name' => $params['name'],
-                'email' => $params['email'],
-                'password' => $params['password'],
-            ]);
+            $user = $this->userRepo->updateOrCreate(
+                [
+                    'email' => $params['email'],
+                ],
+                [
+                    'name' => $params['name'],
+                    'email' => $params['email'],
+                    'password' => Hash::make($params['password']),
+                ]
+            );
             event(new Registered($user));
-            $accessToken = $user->createToken($params['email'], [User::ABILITY])->plainTextToken;
 
             DB::commit();
         } catch (\Exception $e) {
@@ -39,8 +45,19 @@ class AuthService extends BaseService implements AuthServiceInterface
             return $this->response(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->response(Response::HTTP_OK, [
-            'access_token' => $accessToken,
-        ]);
+        return $this->response(Response::HTTP_OK, []);
+    }
+
+    public function login($params)
+    {
+        if (Auth::attempt($params)) {
+            $accessToken = Auth::user()->createToken($params['email'], [User::ABILITY])->plainTextToken;
+
+            return $this->response(Response::HTTP_OK, [
+                'access_token' => $accessToken,
+            ]);
+        }
+
+        return $this->response(Response::HTTP_NOT_FOUND, [], 'Error login.');
     }
 }

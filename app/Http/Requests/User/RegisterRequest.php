@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\User;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -30,7 +31,12 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'email' => ['required', 'email', 'max:255', function ($attribute, $value, $fail) {
+                $isUser = User::where($attribute, $value)->whereNotNull('email_verified_at')->exists();
+                if ($isUser) {
+                    $fail('The selected ' . $attribute . ' is invalid.');
+                }
+            }],
             'password' => ['required', 'confirmed', 'min:8', 'max:255', Password::min(8)
                 ->letters()
                 ->mixedCase()

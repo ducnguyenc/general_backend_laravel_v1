@@ -49,6 +49,11 @@ class Handler extends ExceptionHandler
             //
         });
 
+        $this->renderable(function (InvalidSignatureException $e) {
+            dd($e->getMessage());
+            return response()->json([], Response::HTTP_FORBIDDEN);
+        });
+
         $this->renderable(function (Throwable $e, $request) {
             if ($request->is('api/*') && !env('APP_DEBUG')) {
                 return response()->json([

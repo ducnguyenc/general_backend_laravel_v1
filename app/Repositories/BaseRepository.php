@@ -13,4 +13,9 @@ class BaseRepository
     {
         return $this->model->create($attributes);
     }
+
+    public function updateOrCreate($attributes)
+    {
+        return $this->model->updateOrCreate($attributes);
+    }
 }
