@@ -47,3 +47,6 @@ Route::post('/forgot-password', function (Request $request) {
 Route::get('/reset-password/{token}', function ($token) {
     return redirect()->to(env('APP_URL_FE') . config('const.uri_fe.reset-password') . '/' . $token);
 })->middleware('guest')->name('password.reset');
+
+Route::get('a', function () {
+});
