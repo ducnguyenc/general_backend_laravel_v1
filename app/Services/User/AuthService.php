@@ -42,7 +42,7 @@ class AuthService extends BaseService implements AuthServiceInterface
             DB::rollBack();
             Log::error($e->getMessage());
 
-            return $this->response(Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->response(Response::HTTP_INTERNAL_SERVER_ERROR, [], 'Error server.');
         }
 
         return $this->response(Response::HTTP_OK, []);
