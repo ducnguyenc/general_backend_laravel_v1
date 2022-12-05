@@ -21,11 +21,10 @@ jobs:
         shell: pwsh
         run: |
           $diff = git diff
-          Write-Host "docs_changed=$diff" >> $GITHUB_OUTPUT
-          echo $GITHUB_OUTPUT
+          echo "docs_changed=$diff" >> $GITHUB_OUTPUT
 
       - name: Commit report
-        if: $GITHUB_OUTPUT == 'True'
+        if: ${{ env.GITHUB_OUTPUT == 'True' }}
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'
