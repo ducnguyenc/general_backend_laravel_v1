@@ -21,16 +21,15 @@ jobs:
         shell: pwsh
         run: |
           $diff = (git diff).Length -gt 0
-          echo "docs_changed::$diff" >> $GITHUB_OUTPUT
-          echo "${{ steps.check_file_changed.outputs.docs_changed }}"
-          echo $diff
+          echo "docs_changed::True" >> $GITHUB_OUTPUT
 
-      - name: abc
+      - name: pwsh
         run: |
           echo "${{ steps.check_file_changed.outputs.docs_changed }}"
 
+
       - name: Commit report
-        if: ${{ steps.check_file_changed.outputs.docs_changed }}
+        if: ${{ steps.check_file_changed.outputs.docs_changed }} == 'True'
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'
