@@ -24,6 +24,7 @@ jobs:
           Write-Host "::set-output name=docs_changed::$diff"
 
       - name: abc
+        if: steps.check_file_changed.outputs.docs_changed == 'True'
         run: |
           echo "steps.check_file_changed.outputs.docs_changed"
           echo steps.check_file_changed.outputs.docs_changed
