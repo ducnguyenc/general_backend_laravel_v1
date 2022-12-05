@@ -2,10 +2,8 @@
 
 use App\Http\Controllers\Api\V1\User\AuthController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
