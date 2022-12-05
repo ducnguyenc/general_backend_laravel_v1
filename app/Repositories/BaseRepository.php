@@ -14,8 +14,8 @@ class BaseRepository
         return $this->model->create($attributes);
     }
 
-    public function updateOrCreate($attributes)
+    public function updateOrCreate(array $attributes, array $values = [])
     {
-        return $this->model->updateOrCreate($attributes);
+        return $this->model->updateOrCreate($attributes, $values);
     }
 }

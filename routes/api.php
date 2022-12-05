@@ -28,7 +28,7 @@ Route::middleware(['auth:sanctum', 'ability:user'])->group(function () {
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('/register', 'register');
+    Route::post('/register', 'register')->middleware('throttle:1,60');
     Route::post('/login', 'login');
     Route::get('/email/verify/{id}/{hash}', 'verify')->middleware('signed')->name('verification.verify');
     Route::get('/email/verification-notification', 'send')->middleware('throttle:6,1')->name('verification.send');
