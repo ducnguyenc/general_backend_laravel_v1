@@ -21,7 +21,7 @@ jobs:
         shell: pwsh
         run: |
           $diff = git diff
-          "docs_changed=$diff" >> $GITHUB_OUTPUT
+          echo "docs_changed=$diff" >> $GITHUB_OUTPUT
 
       - name: Commit report
         if: steps.check_file_changed.outputs.docs_changed == 'True'
