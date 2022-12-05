@@ -23,14 +23,13 @@ jobs:
           $isDiff = (git diff).Length -gt 0
           echo "SELECTED_COLOR=$isDiff" >> $env:GITHUB_OUTPUT
 
-
       - name: Get color
         run: echo "${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
 
       - name: Commit report
         if: ${{ steps.random-color-generator.outputs.SELECTED_COLOR == 'True' }}
         run: |
-          git config --global user.name 'Your Name'
-          git config --global user.email 'your-username@users.noreply.github.com'
+          git config --global user.name '${{ github.actor }}'
+          git config --global user.email '<>'
           git commit -am "Commit report"
           git push
