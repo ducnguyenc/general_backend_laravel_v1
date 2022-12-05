@@ -26,10 +26,10 @@ jobs:
         run: echo "${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
 
       - name: Set color
-        id: random-color-generator
+        id: a
         run: echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
       - name: Get color
-        run: echo "The selected color is ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
+        run: echo "The selected color is ${{ steps.a.outputs.SELECTED_COLOR }}"
 
       - name: Commit report
         if: ${{ steps.random-color-generator.outputs.SELECTED_COLOR == 'True' }}
