@@ -16,7 +16,15 @@ jobs:
       - name: Fix Style
         run: ./vendor/bin/pint -v
 
+      - name: pwsh
+        # Give an id to the step, so we can reference it later
+        id: check_file_changed
+        run: |
+          diff = `git diff`
+          Write-Host "::set-output name=docs_changed::$diff"
+
       - name: Commit report
+        if: steps.check_file_changed.outputs.docs_changed == 'True'
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'
