@@ -17,20 +17,12 @@ jobs:
         run: ./vendor/bin/pint -v
 
       - name: pwsh
-        id: check_file_changed
+        id: random-color-generator
         shell: pwsh
         run: |
           $diff = (git diff).Length -gt 0
-          echo "docs_changed=True" >> $GITHUB_OUTPUT
+          run: echo "SELECTED_COLOR=$diff" >> $GITHUB_OUTPUT
 
-      - name: abc
-        run: |
-          echo "${{ steps.check_file_changed.outputs.docs_changed }}"
-
-      - name: Set color
-        id: random-color-generator
-        run: |
-          echo "SELECTED_COLOR=True" >> $GITHUB_OUTPUT
       - name: Get color
         run: echo "${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
 
