@@ -27,6 +27,11 @@ jobs:
         run: |
           echo "${{ steps.check_file_changed.outputs.docs_changed }}"
 
+      - name: Set color
+        id: random-color-generator
+        run: echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
+      - name: Get color
+        run: echo "${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
 
       - name: Commit report
         if: ${{ steps.check_file_changed.outputs.docs_changed }} == 'True'
