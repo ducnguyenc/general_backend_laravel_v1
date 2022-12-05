@@ -17,6 +17,7 @@ jobs:
         run: ./vendor/bin/pint -v
 
       - name: pwsh
+        shell: bash
         id: random-color-generator
         run: |
           $diff = git diff
