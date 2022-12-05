@@ -17,7 +17,7 @@ jobs:
         run: ./vendor/bin/pint -v
 
       - name: pwsh
-        shell: bash
+        shell: pwsh
         id: random-color-generator
         run: |
           $diff = git diff
@@ -28,6 +28,7 @@ jobs:
         run: echo "${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
 
       - name: Set color
+        shell: pwsh
         id: a
         run: echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
       - name: Get color
