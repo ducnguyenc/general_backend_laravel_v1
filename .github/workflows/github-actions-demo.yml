@@ -21,7 +21,7 @@ jobs:
         shell: pwsh
         run: |
           $diff = (git diff).Length -gt 0
-          "docs_changed::$diff" >> $GITHUB_OUTPUT
+          Write-Host "docs_changed::$diff" >> $GITHUB_OUTPUT
           echo $GITHUB_OUTPUT
           echo steps.check_file_changed.outputs.docs_changed
 
