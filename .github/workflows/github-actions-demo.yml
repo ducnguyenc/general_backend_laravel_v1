@@ -25,6 +25,11 @@ jobs:
           echo $GITHUB_OUTPUT
           echo steps.check_file_changed.outputs.docs_changed
 
+      - name: pwsh
+        run: |
+          echo steps.check_file_changed.outputs.docs_changed
+          echo $GITHUB_OUTPUT
+
       - name: Commit report
         if: $GITHUB_OUTPUT == 'True'
         run: |
