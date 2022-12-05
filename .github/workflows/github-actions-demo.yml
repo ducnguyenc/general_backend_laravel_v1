@@ -24,16 +24,9 @@ jobs:
         run: |
           $diff = (git diff).Length -gt 0
           Write-Host "docs_changed::$diff" >> $GITHUB_OUTPUT
-          echo $GITHUB_OUTPUT
-          echo steps.check_file_changed.outputs.docs_changed
-
-      - name: pwsh
-        run: |
-          echo steps.check_file_changed.outputs.docs_changed
-          echo $GITHUB_OUTPUT
 
       - name: Commit report
-        if: steps.check_file_changed.outputs.docs_changed == 'True'
+        if: $GITHUB_OUTPUT.docs_changed == 'True'
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'
