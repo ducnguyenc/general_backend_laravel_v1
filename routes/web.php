@@ -18,5 +18,6 @@ Route::get('/', function () {
 });
 
 Route::get('swagger', function () {
+    $a = 'a' . 'b';
     return view('swagger.swagger');
 });
