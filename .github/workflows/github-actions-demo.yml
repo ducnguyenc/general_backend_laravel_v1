@@ -23,14 +23,8 @@ jobs:
           $diff = git diff
           Write-Host "::set-output name=docs_changed::$diff"
 
-      - name: abc
-        if: steps.check_file_changed.outputs.docs_changed == 'True'
-        run: |
-          echo "steps.check_file_changed.outputs.docs_changed"
-          echo steps.check_file_changed.outputs.docs_changed
-
       - name: Commit report
-        if: ${{ env.GITHUB_OUTPUT == 'True' }}
+        if: steps.check_file_changed.outputs.docs_changed == 'True'
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'
