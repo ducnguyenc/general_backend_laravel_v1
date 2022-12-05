@@ -17,12 +17,11 @@ jobs:
         run: ./vendor/bin/pint -v
 
       - name: pwsh
-        # Give an id to the step, so we can reference it later
         id: check_file_changed
         shell: pwsh
         run: |
           $diff = git diff
-          Write-Host "::set-output name=docs_changed::$diff"
+          docs_changed=$diff" >> $GITHUB_OUTPUT
 
       - name: Commit report
         if: steps.check_file_changed.outputs.docs_changed == 'True'
