@@ -18,8 +18,6 @@ jobs:
 
       - name: Commit report
         run: |
-          git config --local user.name 'Your Name'
-          git config --local user.email 'test@gmail.com'
           git add .
           git commit -m "Automated report"
           git push
