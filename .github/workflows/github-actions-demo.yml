@@ -18,13 +18,18 @@ jobs:
 
       - name: pwsh
         id: random-color-generator
-        shell: pwsh
         run: |
           $diff = (git diff).Length -gt 0
           echo "SELECTED_COLOR=$diff" >> $GITHUB_OUTPUT
 
       - name: Get color
         run: echo "${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
+
+      - name: Set color
+        id: random-color-generator
+        run: echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
+      - name: Get color
+        run: echo "The selected color is ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
 
       - name: Commit report
         if: ${{ steps.random-color-generator.outputs.SELECTED_COLOR == 'True' }}
