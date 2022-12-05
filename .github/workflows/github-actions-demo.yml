@@ -18,11 +18,11 @@ jobs:
         run: ./vendor/bin/pint -v
 
       - name: pwsh
+        shell: pwsh
         id: random-color-generator
         run: |
-          $diff = `git diff`
+          $diff = git diff
           $isDiff = $diff.Length -gt 0
-          echo "SELECTED_COLOR=True" >> $GITHUB_OUTPUT
           echo "SELECTED_COLOR=True" >> $GITHUB_ENV
 
       - name: Get color
