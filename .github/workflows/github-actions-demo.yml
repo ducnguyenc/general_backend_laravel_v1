@@ -23,7 +23,7 @@ jobs:
           $diff = (git diff).Length -gt 0
           echo "docs_changed::$diff" >> $GITHUB_OUTPUT
           echo "${{ steps.check_file_changed.outputs.docs_changed }}"
-          echo "$GITHUB_OUTPUT"
+          echo "$diff"
 
       - name: abc
         run: |
