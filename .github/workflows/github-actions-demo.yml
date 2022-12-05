@@ -23,6 +23,9 @@ jobs:
           $diff = git diff
           echo "docs_changed=$diff" >> $GITHUB_OUTPUT
 
+      - name: abc
+        run: echo "$GITHUB_OUTPUT"
+
       - name: Commit report
         if: ${{ env.GITHUB_OUTPUT == 'True' }}
         run: |
