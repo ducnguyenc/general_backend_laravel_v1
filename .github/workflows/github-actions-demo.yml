@@ -24,7 +24,7 @@ jobs:
           echo "docs_changed::$diff" >> $GITHUB_OUTPUT
 
       - name: abc
-        run: echo "${{ steps.check_file_changed.outputs.docs_changed }}"
+        run: echo ${{ steps.check_file_changed.outputs.docs_changed }} == 'True'
 
       - name: Commit report
         if: ${{ steps.check_file_changed.outputs.docs_changed }} == 'True'
