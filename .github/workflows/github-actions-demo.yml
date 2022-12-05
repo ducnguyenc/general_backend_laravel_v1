@@ -15,3 +15,9 @@ jobs:
 
       - name: Fix Style
         run: ./vendor/bin/pint -v
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: Show GitHub Actions logo
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
