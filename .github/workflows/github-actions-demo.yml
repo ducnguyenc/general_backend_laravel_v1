@@ -26,7 +26,7 @@ jobs:
           echo steps.check_file_changed.outputs.docs_changed
 
       - name: Commit report
-        if: steps.check_file_changed.outputs.docs_changed == 'True'
+        if: $GITHUB_OUTPUT == 'True'
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'
