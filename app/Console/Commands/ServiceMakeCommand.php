@@ -50,7 +50,7 @@ class ServiceMakeCommand extends GeneratorCommand
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
                         ? $customPath
-                        : __DIR__.$stub;
+                        : __DIR__ . $stub;
     }
 
     /**
@@ -61,7 +61,7 @@ class ServiceMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Services';
+        return $rootNamespace . '\Services';
     }
 
     /**

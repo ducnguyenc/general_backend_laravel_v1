@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1\User;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\RegisterRequest;
-use App\Models\User;
 use App\Services\User\AuthServiceInterface;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -41,7 +40,6 @@ class AuthController extends ApiController
      */
     public function login(LoginRequest $request)
     {
-
         [$data, $status] = $this->authService->login($request->validated());
 
         if ($status !== Response::HTTP_OK) {

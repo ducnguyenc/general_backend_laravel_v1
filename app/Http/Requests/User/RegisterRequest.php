@@ -42,7 +42,7 @@ class RegisterRequest extends FormRequest
                 ->mixedCase()
                 ->numbers()
                 ->symbols()
-                ->uncompromised()],
+                ->uncompromised(), ],
         ];
     }
 
