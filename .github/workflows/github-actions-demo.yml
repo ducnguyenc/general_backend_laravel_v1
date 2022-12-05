@@ -21,7 +21,7 @@ jobs:
         id: check_file_changed
         shell: pwsh
         run: |
-          diff=`git diff`
+          $diff = git diff
           Write-Host "::set-output name=docs_changed::$diff"
 
       - name: Commit report
