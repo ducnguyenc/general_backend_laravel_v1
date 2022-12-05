@@ -23,7 +23,7 @@ jobs:
         run: |
           $diff = git diff
           $isDiff = $diff.Length -gt 0
-          echo "SELECTED_COLOR=True" >> $env:GITHUB_OUTPUT
+          echo "SELECTED_COLOR=False" >> $env:GITHUB_OUTPUT
 
       - name: Get color
         run: echo "${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
