@@ -22,7 +22,7 @@ jobs:
         run: |
           $diff = git diff
           Write-Host "docs_changed=$diff" >> $GITHUB_OUTPUT
-          echo env.GITHUB_OUTPUT
+          echo $GITHUB_OUTPUT
 
       - name: Commit report
         if: $GITHUB_OUTPUT == 'True'
