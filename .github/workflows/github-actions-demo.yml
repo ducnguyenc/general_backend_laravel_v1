@@ -21,11 +21,11 @@ jobs:
         id: random-color-generator
         run: |
           $diff = (git diff).Length -gt 0
-        shell: bash
           echo "SELECTED_COLOR=True" >> $GITHUB_OUTPUT
           echo "${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
 
       - name: Get color
+        shell: pwsh
         run: echo "${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
 
       - name: Set color
