@@ -26,6 +26,7 @@ jobs:
       - name: abc
         run: |
           echo "steps.check_file_changed.outputs.docs_changed"
+          echo steps.check_file_changed.outputs.docs_changed
 
       - name: Commit report
         if: ${{ env.GITHUB_OUTPUT == 'True' }}
