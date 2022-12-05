@@ -19,8 +19,9 @@ jobs:
       - name: pwsh
         # Give an id to the step, so we can reference it later
         id: check_file_changed
+        shell: pwsh
         run: |
-          diff = `git diff`
+          diff=`git diff`
           Write-Host "::set-output name=docs_changed::$diff"
 
       - name: Commit report
