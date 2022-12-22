@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
@@ -19,6 +20,19 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
+        if ($request->is('api/*')) {
+            $tokens = User::where('email', $request->input('email'))->first()->tokens;
+            if ($tokens->count()) {
+                return response()->json([
+                    'status' => '',
+                    'data' => [],
+                    'message' => 'logined'
+                ]);
+            }
+
+            return $next($request);
+        }
+
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {

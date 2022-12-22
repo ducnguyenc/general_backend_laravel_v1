@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\V1\User;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\User\ForgotPasswordRequest;
 use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\RegisterRequest;
+use App\Http\Requests\User\UpdatePasswordRequest;
 use App\Models\User;
 use App\Services\User\AuthServiceInterface;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -41,23 +43,14 @@ class AuthController extends ApiController
      */
     public function login(LoginRequest $request)
     {
-
         [$data, $status] = $this->authService->login($request->validated());
-
-        if ($status !== Response::HTTP_OK) {
-            return $this->response($data, $status);
-        }
-
-        if (!request()->hasValidSignature()) {
-            return $this->response(['message' => 'validate signature'], Response::HTTP_FOUND);
-        }
 
         return $this->response($data, $status);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
+     * @param  Illuminate\Foundation\Auth\EmailVerificationRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function verify(EmailVerificationRequest $request)
@@ -70,6 +63,8 @@ class AuthController extends ApiController
     /**
      * Show the form for creating a new resource.
      *
+     * @param Illuminate\Http\Request $request
+     * 
      * @return \Illuminate\Http\Response
      */
     public function send(Request $request)
@@ -77,5 +72,44 @@ class AuthController extends ApiController
         $request->user()->sendEmailVerificationNotification();
 
         $this->response(['status' => 'success', 'data' => [], 'message' => ''], Response::HTTP_OK);
+    }
+
+    /**
+     * Forgot password.
+     * @param App\Http\Requests\User\ForgotPasswordRequest $request
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function forgotPassword(ForgotPasswordRequest $request)
+    {
+        [$data, $status] = $this->authService->forgotPassword($request->validated());
+
+        return $this->response($data, $status);
+    }
+
+    /**
+     * Reset password.
+     * @param string $token
+     * 
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     */
+    public function resetPassword(string $token)
+    {
+        return redirect(sprintf('%s%s/%s', env('APP_URL_FE'), config('const.uri_fe.reset-password'), $token));
+    }
+
+    /**
+     * Update password reset.
+     * @param App\Http\Requests\User\UpdatePasswordRequest $request
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePassword(UpdatePasswordRequest $request)
+    {
+        [$data, $status] = $this->authService->updatePassword(
+            $request->only('email', 'password', 'password_confirmation', 'token')
+        );
+
+        return $this->response($data, $status);
     }
 }

@@ -21,29 +21,18 @@ use Illuminate\Support\Facades\URL;
 Route::middleware(['auth:sanctum', 'ability:user'])->group(function () {
     // verified
     Route::middleware(['verified'])->group(function () {
-        Route::get('/profile', function () {
+        Route::get('profile', function () {
             return 'aaa';
         });
     });
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('/register', 'register')->middleware('throttle:1,60');
-    Route::post('/login', 'login');
-    Route::get('/email/verify/{id}/{hash}', 'verify')->middleware('signed')->name('verification.verify');
-    Route::get('/email/verification-notification', 'send')->middleware('throttle:6,1')->name('verification.send');
+    Route::post('register', 'register');
+    Route::post('login', 'login');
+    Route::get('email/verify/{id}/{hash}', 'verify')->middleware('signed')->name('verification.verify');
+    Route::get('email/verification-notification', 'send')->middleware('throttle:6,1')->name('verification.send');
+    Route::post('forgot-password', 'forgotPassword')->middleware('guest')->name('password.email');
+    Route::get('reset-password/{token}', 'resetPassword')->middleware('guest')->name('password.reset');
+    Route::post('reset-password', 'updatePassword')->middleware('guest')->name('password.update');
 });
-
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
-
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
-
-    return response()->json(['status' => $status], 200);
-})->middleware('guest')->name('password.email');
-
-Route::get('/reset-password/{token}', function ($token) {
-    return redirect()->to(env('APP_URL_FE') . config('const.uri_fe.reset-password') . '/' . $token);
-})->middleware('guest')->name('password.reset');

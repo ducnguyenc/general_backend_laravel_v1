@@ -110,6 +110,6 @@ return [
 
     'verification' => [
         // minutes
-        'expire' => 1/60
+        'expire' => 60
     ]
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Response;
@@ -50,13 +51,17 @@ class Handler extends ExceptionHandler
             //
         });
 
-        $this->renderable(function (Throwable $e, $request) {
-            if ($request->is('api/*') && !env('APP_DEBUG')) {
+        $this->renderable(function (Exception $e, $request) {
+            if ($request->is('api/*')) {
+                if ($e instanceof InvalidSignatureException) {
+                    return redirect(sprintf('%s%s', env('APP_URL_FE'), config('const.uri_fe.signup')));
+                }
+
                 return response()->json([
-                    'status' => 'Client error',
+                    'status' => 'Server error',
                     'data' => [],
                     'message' => $e->getMessage(),
-                ], $e->getStatusCode());
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         });
     }

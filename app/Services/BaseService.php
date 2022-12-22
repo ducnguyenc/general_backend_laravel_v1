@@ -9,6 +9,7 @@ class BaseService
     /**
      * Response success
      *
+     * @param  int  $statusCode
      * @param  array  $data
      * @param  string  $message
      * @return array
