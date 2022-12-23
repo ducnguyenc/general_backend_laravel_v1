@@ -7,6 +7,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -55,6 +56,14 @@ class Handler extends ExceptionHandler
             if ($request->is('api/*')) {
                 if ($e instanceof InvalidSignatureException) {
                     return redirect(sprintf('%s%s', env('APP_URL_FE'), config('const.uri_fe.signup')));
+                }
+
+                if ($e instanceof ValidationException) {
+                    return response()->json([
+                        'status' => 'Client error',
+                        'data' => $e->errors(),
+                        'message' => '',
+                    ], Response::HTTP_UNPROCESSABLE_ENTITY);
                 }
 
                 return response()->json([

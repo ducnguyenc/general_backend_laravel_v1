@@ -10,6 +10,7 @@ use App\Http\Requests\User\UpdatePasswordRequest;
 use App\Models\User;
 use App\Services\User\AuthServiceInterface;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -17,18 +18,21 @@ class AuthController extends ApiController
 {
     private $authService;
 
+    /**
+     * @param \App\Services\User\AuthServiceInterface $authService
+     */
     public function __construct(AuthServiceInterface $authService)
     {
         $this->authService = $authService;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Register user.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\User\RegisterRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): JsonResponse
     {
         [$data, $status] = $this->authService->register($request->validated());
 
@@ -50,7 +54,7 @@ class AuthController extends ApiController
 
     /**
      * Show the form for creating a new resource.
-     * @param  Illuminate\Foundation\Auth\EmailVerificationRequest  $request
+     * @param  \Illuminate\Foundation\Auth\EmailVerificationRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function verify(EmailVerificationRequest $request)
@@ -63,7 +67,7 @@ class AuthController extends ApiController
     /**
      * Show the form for creating a new resource.
      *
-     * @param Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * 
      * @return \Illuminate\Http\Response
      */

@@ -37,12 +37,7 @@ class RegisterRequest extends FormRequest
                     $fail('The selected ' . $attribute . ' is invalid.');
                 }
             }],
-            'password' => ['required', 'confirmed', 'min:8', 'max:255', Password::min(8)
-                ->letters()
-                ->mixedCase()
-                ->numbers()
-                ->symbols()
-                ->uncompromised()],
+            'password' => ['required', 'confirmed', 'min:8', 'max:255'],
         ];
     }
 

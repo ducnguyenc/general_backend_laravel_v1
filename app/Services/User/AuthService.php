@@ -19,19 +19,26 @@ class AuthService extends BaseService implements AuthServiceInterface
 {
     private $userRepo;
 
+    /**
+     * @param \App\Repositories\UserRepositoryInterface $userRepo
+     */
     public function __construct(UserRepositoryInterface $userRepo)
     {
         $this->userRepo = $userRepo;
     }
 
-    public function register($params)
+    /**
+     * Register user
+     * 
+     * @param array $params
+     * @return array
+     */
+    public function register(array $params): array
     {
         DB::beginTransaction();
         try {
-            $user = $this->userRepo->updateOrCreate(
-                [
-                    'email' => $params['email'],
-                ],
+            $user = $this->userRepo->firstOrCreate(
+                ['email' => $params['email']],
                 [
                     'name' => $params['name'],
                     'email' => $params['email'],
