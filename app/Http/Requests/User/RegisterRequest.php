@@ -30,32 +30,14 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'email' => ['required', 'email', 'max:255', function ($attribute, $value, $fail) {
+            'name' => 'bail|required|max:255',
+            'email' => ['bail', 'required', 'email', 'max:255', function ($attribute, $value, $fail) {
                 $isUser = User::where($attribute, $value)->whereNotNull('email_verified_at')->exists();
                 if ($isUser) {
                     $fail('The selected ' . $attribute . ' is invalid.');
                 }
             }],
-            'password' => ['required', 'confirmed', 'min:8', 'max:255'],
+            'password' => 'bail|required|min:8|max:255|confirmed',
         ];
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $response = new JsonResponse(
-            ['status' => 'Client error', 'data' => $validator->errors(), 'message' => ''],
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        );
-
-        throw new ValidationException($validator, $response);
     }
 }
