@@ -3,12 +3,7 @@
 namespace App\Http\Requests\User;
 
 use App\Models\User;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\ValidationException;
 
 class RegisterRequest extends FormRequest
 {
@@ -34,7 +29,7 @@ class RegisterRequest extends FormRequest
             'email' => ['bail', 'required', 'email', 'max:255', function ($attribute, $value, $fail) {
                 $isUser = User::where($attribute, $value)->whereNotNull('email_verified_at')->exists();
                 if ($isUser) {
-                    $fail('The selected ' . $attribute . ' is invalid.');
+                    $fail(trans('validation.unique', ['attribute' => $attribute]));
                 }
             }],
             'password' => 'bail|required|min:8|max:255|confirmed',

@@ -7,21 +7,19 @@ use App\Repositories\UserRepositoryInterface;
 use App\Services\BaseService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
 
 class AuthService extends BaseService implements AuthServiceInterface
 {
     private $userRepo;
 
     /**
-     * @param \App\Repositories\UserRepositoryInterface $userRepo
+     * @param  \App\Repositories\UserRepositoryInterface  $userRepo
      */
     public function __construct(UserRepositoryInterface $userRepo)
     {
@@ -30,8 +28,8 @@ class AuthService extends BaseService implements AuthServiceInterface
 
     /**
      * Register user
-     * 
-     * @param array $params
+     *
+     * @param  array  $params
      * @return array
      */
     public function register(array $params): array
@@ -98,7 +96,7 @@ class AuthService extends BaseService implements AuthServiceInterface
             $params,
             function ($user, $password) {
                 $user->forceFill([
-                    'password' => Hash::make($password)
+                    'password' => Hash::make($password),
                 ]);
 
                 $user->save();

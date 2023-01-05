@@ -21,12 +21,12 @@ class RedirectIfAuthenticated
     public function handle(Request $request, Closure $next, ...$guards)
     {
         if ($request->is('api/*')) {
-            $tokens = User::where('email', $request->input('email'))->first()->tokens;
-            if ($tokens->count()) {
+            $user = User::where('email', $request->input('email'))->first();
+            if (isset($user->token) && $user->token->count()) {
                 return response()->json([
                     'status' => '',
                     'data' => [],
-                    'message' => 'logined'
+                    'message' => 'logined',
                 ]);
             }
 

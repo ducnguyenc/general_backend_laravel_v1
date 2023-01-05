@@ -2,25 +2,18 @@
 
 namespace Tests\Feature\User;
 
-use App\Http\Controllers\Api\V1\User\AuthController;
 use App\Models\User;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class RegisterTest extends TestCase
 {
-    // use RefreshDatabase;
-    use WithFaker;
+    use RefreshDatabase, WithFaker;
 
-    private $uri = '/api/register';
+    private $uri = 'api/register';
 
     /**
      * Test success.
@@ -48,7 +41,7 @@ class RegisterTest extends TestCase
 
     /**
      * Test invalid.
-     * 
+     *
      * @dataProvider provideInvalidName
      * @dataProvider provideInvalidEmail
      * @dataProvider provideInvalidPassword
@@ -73,8 +66,8 @@ class RegisterTest extends TestCase
 
     /**
      * Make invalid data.
-     * 
-     * @param array $inputs
+     *
+     * @param  array  $inputs
      * @return array
      */
     private function makeInvalidData($inputs): array
@@ -86,7 +79,7 @@ class RegisterTest extends TestCase
 
     /**
      * Provide invalid name.
-     * 
+     *
      * @return array
      */
     public function provideInvalidName()
@@ -99,7 +92,7 @@ class RegisterTest extends TestCase
 
     /**
      * Provide invalid email.
-     * 
+     *
      * @return array
      */
     public function provideInvalidEmail()
@@ -110,14 +103,15 @@ class RegisterTest extends TestCase
             'Email is limit to 255 chars' => ['email', sprintf('%s@a', str_repeat('a', 256)), 'The email must not be greater than 255 characters.'],
             'Email is exists' => ['email', 'valueEmail' => function () {
                 User::factory()->create(['email' => 'a@example']);
+
                 return 'a@example';
-            }, 'The selected email is invalid.'],
+            }, 'The email has already been taken.'],
         ];
     }
 
     /**
      * Provide invalid password.
-     * 
+     *
      * @return array
      */
     public function provideInvalidPassword()

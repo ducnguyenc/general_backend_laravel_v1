@@ -19,7 +19,7 @@ class AuthController extends ApiController
     private $authService;
 
     /**
-     * @param \App\Services\User\AuthServiceInterface $authService
+     * @param  \App\Services\User\AuthServiceInterface  $authService
      */
     public function __construct(AuthServiceInterface $authService)
     {
@@ -54,6 +54,7 @@ class AuthController extends ApiController
 
     /**
      * Show the form for creating a new resource.
+     *
      * @param  \Illuminate\Foundation\Auth\EmailVerificationRequest  $request
      * @return \Illuminate\Http\Response
      */
@@ -67,8 +68,7 @@ class AuthController extends ApiController
     /**
      * Show the form for creating a new resource.
      *
-     * @param \Illuminate\Http\Request $request
-     * 
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function send(Request $request)
@@ -80,8 +80,8 @@ class AuthController extends ApiController
 
     /**
      * Forgot password.
-     * @param App\Http\Requests\User\ForgotPasswordRequest $request
-     * 
+     *
+     * @param  App\Http\Requests\User\ForgotPasswordRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function forgotPassword(ForgotPasswordRequest $request)
@@ -93,8 +93,8 @@ class AuthController extends ApiController
 
     /**
      * Reset password.
-     * @param string $token
-     * 
+     *
+     * @param  string  $token
      * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
     public function resetPassword(string $token)
@@ -104,8 +104,8 @@ class AuthController extends ApiController
 
     /**
      * Update password reset.
-     * @param App\Http\Requests\User\UpdatePasswordRequest $request
-     * 
+     *
+     * @param  App\Http\Requests\User\UpdatePasswordRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function updatePassword(UpdatePasswordRequest $request)

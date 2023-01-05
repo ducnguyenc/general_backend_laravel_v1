@@ -8,10 +8,10 @@ class ApiController extends Controller
 {
     /**
      * Base response API.
-     * 
-     * @param array $data
-     * @param int $status
-     * @param array $headers
+     *
+     * @param  array  $data
+     * @param  int  $status
+     * @param  array  $headers
      * @return \Illuminate\Http\JsonResponse
      */
     public function response(array $data, int $status, array $headers = []): \Illuminate\Http\JsonResponse
