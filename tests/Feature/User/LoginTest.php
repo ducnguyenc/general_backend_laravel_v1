@@ -6,55 +6,55 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
-class RegisterTest extends TestCase
+class LoginTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    private $uri = 'api/register';
+    private $uri = 'api/login';
 
     /**
      * Test success.
      *
      * @return void
      */
-    public function test_success(): void
+    public function test_success()
     {
-        Notification::fake();
-        $password = $this->faker->password;
+        $user = User::factory()->create();
+
         $response = $this->postJson($this->uri, [
-            'name' => $this->faker->name,
-            'email' => $this->faker->email,
-            'password' => $password,
-            'password_confirmation' => $password,
+            'email' => $user->email,
+            'password' => 'password',
         ]);
 
         $response->assertStatus(200)->assertJson([
             'status' => 'Successful',
             'data' => [],
             'message' => '',
+        ])->assertJsonStructure([
+            'status',
+            'data' => ['access_token'],
+            'message',
         ]);
-        Notification::assertCount(1);
     }
 
     /**
      * Test invalid.
      *
-     * @dataProvider provideInvalidName
      * @dataProvider provideInvalidEmail
      * @dataProvider provideInvalidPassword
      *
      * @return void
      */
-    public function test_invalid($attribute, $value, $message): void
+    public function test_invalid($attribute, $value, $message)
     {
         $inputs = $this->makeInvalidData([
             $attribute => is_callable($value) ? $value() : $value,
         ]);
 
         $response = $this->postJson($this->uri, $inputs);
+
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)->assertJson([
             'status' => 'Client error',
             'data' => [
@@ -78,22 +78,6 @@ class RegisterTest extends TestCase
     }
 
     /**
-     * Provide invalid name.
-     *
-     * @return array
-     */
-    public function provideInvalidName()
-    {
-        return [
-            'Name is required' => ['name', null, 'The name field is required.'],
-            'Name is limit to 255 chars' => [
-                'name',
-                str_repeat('a', 256), 'The name must not be greater than 255 characters.',
-            ],
-        ];
-    }
-
-    /**
      * Provide invalid email.
      *
      * @return array
@@ -107,11 +91,6 @@ class RegisterTest extends TestCase
                 'email',
                 sprintf('%s@a', str_repeat('a', 256)), 'The email must not be greater than 255 characters.',
             ],
-            'Email is exists' => ['email', 'valueEmail' => function () {
-                User::factory()->create(['email' => 'a@example']);
-
-                return 'a@example';
-            }, 'The email has already been taken.'],
         ];
     }
 
@@ -132,10 +111,59 @@ class RegisterTest extends TestCase
                 'password', str_repeat('a', 256),
                 'The password must not be greater than 255 characters.',
             ],
-            'Password is not match confirmation' => [
-                'password', str_repeat('a', 8),
-                'The password confirmation does not match.',
-            ],
         ];
+    }
+
+    /**
+     * Test fail email verified at.
+     *
+     * @return void
+     */
+    public function test_fail_account()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->postJson($this->uri, [
+            'email' => $this->faker->email,
+            'password' => 'password',
+        ]);
+
+        $response->assertStatus(Response::HTTP_NOT_FOUND)->assertJson([
+            'status' => 'Client error',
+            'data' => [],
+            'message' => config('messages.error.login'),
+        ]);
+
+        $response = $this->postJson($this->uri, [
+            'email' => $user->email,
+            'password' => $this->faker->password,
+        ]);
+
+        $response->assertStatus(Response::HTTP_NOT_FOUND)->assertJson([
+            'status' => 'Client error',
+            'data' => [],
+            'message' => config('messages.error.login'),
+        ]);
+    }
+
+    /**
+     * Test fail email verified at.
+     *
+     * @return void
+     */
+    public function test_fail_email_verified_at()
+    {
+        $user = User::factory()->create(['email_verified_at' => null]);
+
+        $response = $this->postJson($this->uri, [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED)->assertJson([
+            'status' => 'Client error',
+            'data' => [],
+            'message' => config('messages.error.verify_email'),
+        ]);
     }
 }

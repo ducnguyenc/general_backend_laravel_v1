@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 class ForgotPasswordTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     private $uri = 'api/forgot-password';
 
@@ -23,15 +23,13 @@ class ForgotPasswordTest extends TestCase
     public function test_success()
     {
         Notification::fake();
-        Mail::fake();
-        $user = User::factory()->create(['email_verified_at' => null,]);
+        $user = User::factory()->create(['email_verified_at' => null]);
 
         $response = $this->postJson($this->uri, [
             'email' => $user->email,
         ]);
 
         $response->assertStatus(200);
-        Mail::assertSent(Illuminate\Auth\Notifications\ResetPassword::class);
         Notification::assertCount(1);
     }
 }

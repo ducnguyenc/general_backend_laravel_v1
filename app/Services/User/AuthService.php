@@ -27,7 +27,7 @@ class AuthService extends BaseService implements AuthServiceInterface
     }
 
     /**
-     * Register user
+     * Register user.
      *
      * @param  array  $params
      * @return array
@@ -57,7 +57,13 @@ class AuthService extends BaseService implements AuthServiceInterface
         return $this->response(Response::HTTP_OK, []);
     }
 
-    public function login($params)
+    /**
+     * Login user.
+     *
+     * @param  array  $params
+     * @return array
+     */
+    public function login(array $params): array
     {
         if (Auth::attempt($params)) {
             if (!isset(Auth::user()->email_verified_at)) {
@@ -71,7 +77,7 @@ class AuthService extends BaseService implements AuthServiceInterface
             ]);
         }
 
-        return $this->response(Response::HTTP_NOT_FOUND, [], 'Error login.');
+        return $this->response(Response::HTTP_NOT_FOUND, [], config('messages.error.login'));
     }
 
     public function forgotPassword(array $params): array
