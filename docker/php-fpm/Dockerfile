@@ -6,13 +6,14 @@ ARG uid=1000
 ARG gid=1000
 RUN groupadd -g ${gid} ${group} && useradd -m -u ${uid} -g ${group} -s /bin/sh ${user}
 
-RUN apt-get update -y
-RUN apt-get install -y
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y \
     libzip-dev unzip libonig-dev libpng-dev \
     libwebp-dev libjpeg62-turbo-dev libxpm-dev \
     libfreetype6-dev
 RUN docker-php-ext-install pdo pdo_mysql zip mbstring
+
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
 
 # config and install php gd
 RUN docker-php-ext-configure gd \

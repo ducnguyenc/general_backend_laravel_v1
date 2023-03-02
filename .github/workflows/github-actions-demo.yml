@@ -1,0 +1,26 @@
+name: PHP Coding Standards Fixer
+run-name: PHP-CS-Fixer
+on:
+  pull_request:
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist
+
+      - name: Run php-cs-fixer
+        run: ./vendor/bin/pint -v --config ./pint.json
+
+      - name: Push php-cs-fixer
+        if: ${{ steps.check-file-changed.outputs.isDiff == 'True' }}
+        run: |
+          git config --local user.name "$(git log -n 1 --pretty=format:%an)"
+          git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
+          git add .
+          git commit -m "php-cs-fixer"
+          git push

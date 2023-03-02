@@ -18,6 +18,10 @@
         "app/Console/Kernel.php",
         "app/Http/Middleware/Authenticate",
         "tests/CreatesApplication.php",
-        "public/index.php"
+        "public/index.php",
+        "app/Console/Commands/RepositoryInterfaceMakeCommand.php",
+        "app/Console/Commands/RepositoryMakeCommand.php",
+        "app/Console/Commands/ServiceInterfaceMakeCommand.php",
+        "app/Console/Commands/ServiceMakeCommand.php"
     ]
 }

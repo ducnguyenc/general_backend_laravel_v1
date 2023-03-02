@@ -13,7 +13,7 @@ services:
       MYSQL_USER: english
       MYSQL_PASSWORD: english
     ports:
-      - 3306:3306
+      - 3308:3306
     volumes:
       - db:/var/lib/mysql
       - ./docker/mysql/my-custom.cnf:/etc/mysql/conf.d/my-custom.cnf
@@ -26,6 +26,7 @@ services:
         GID: ${GID}
     volumes:
       - ./:/var/www/html
+      - ./docker/php-fpm/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     working_dir: /var/www/html
     user: ${UID}:${GID}
 
@@ -44,10 +45,10 @@ services:
       - '8080:80'
       - '443:443'
 
-  redis:
-    image: redis:alpine
-    ports:
-      - 6379:6379
+  # redis:
+  #   image: redis:alpine
+  #   ports:
+  #     - 6380:6379
 
 volumes:
   db:
