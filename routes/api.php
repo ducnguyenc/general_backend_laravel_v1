@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum', 'ability:user'])->group(function () {
     // verified
     Route::middleware(['verified'])->group(function () {
-        Route::get('profile', function () {
+        Route::get('user', function () {
             return 'aaa';
         });
     });
@@ -27,7 +27,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
     Route::get('email/verify/{id}/{hash}', 'verify')->middleware('signed')->name('verification.verify');
-    Route::get('email/verification-notification', 'send')->middleware('throttle:6,1')->name('verification.send');
     Route::post('forgot-password', 'forgotPassword')->middleware('guest')->name('password.email');
     Route::get('reset-password/{token}', 'resetPassword')->middleware('guest')->name('password.reset');
     Route::post('reset-password', 'updatePassword')->middleware('guest')->name('password.update');

@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Api\V1\User;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\User\EmailVerificationRequest;
 use App\Http\Requests\User\ForgotPasswordRequest;
 use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\UpdatePasswordRequest;
-use App\Models\User;
 use App\Services\User\AuthServiceInterface;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -55,7 +54,7 @@ class AuthController extends ApiController
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Foundation\Auth\EmailVerificationRequest  $request
+     * @param  App\Http\Requests\User\EmailVerificationRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function verify(EmailVerificationRequest $request)
