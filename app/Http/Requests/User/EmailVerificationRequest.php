@@ -17,13 +17,13 @@ class EmailVerificationRequest extends FormRequest
     {
         Auth::loginUsingId($this->route('id'));
 
-        if (! hash_equals((string) $this->route('id'),
-                          (string) $this->user()->getKey())) {
+        if (!hash_equals((string) $this->route('id'),
+            (string) $this->user()->getKey())) {
             return false;
         }
 
-        if (! hash_equals((string) $this->route('hash'),
-                          sha1($this->user()->getEmailForVerification()))) {
+        if (!hash_equals((string) $this->route('hash'),
+            sha1($this->user()->getEmailForVerification()))) {
             return false;
         }
 
@@ -49,7 +49,7 @@ class EmailVerificationRequest extends FormRequest
      */
     public function fulfill()
     {
-        if (! $this->user()->hasVerifiedEmail()) {
+        if (!$this->user()->hasVerifiedEmail()) {
             $this->user()->markEmailAsVerified();
 
             event(new Verified($this->user()));
