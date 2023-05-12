@@ -83,10 +83,9 @@ class AuthService extends BaseService implements AuthServiceInterface
 
     /**
      * Forgot password.
-     * 
-     * @param array $params
-     * @param int $role
-     * 
+     *
+     * @param  array  $params
+     * @param  int  $role
      * @return array
      */
     public function forgotPassword(array $params, int $role = User::ROLE_USER_V0): array
@@ -111,10 +110,9 @@ class AuthService extends BaseService implements AuthServiceInterface
 
     /**
      * Update password.
-     * 
-     * @param array $params
-     * @param int $role
-     * 
+     *
+     * @param  array  $params
+     * @param  int  $role
      * @return array
      */
     public function updatePassword(array $params, int $role = User::ROLE_USER_V0): array

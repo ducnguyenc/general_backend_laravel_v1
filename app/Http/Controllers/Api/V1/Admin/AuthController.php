@@ -53,7 +53,7 @@ class AuthController extends ApiController
     /**
      * Show the form for creating a new resource.
      *
-     * @param  App\Http\Requests\EmailVerificationRequest  $request
+     * @param  \App\Http\Requests\EmailVerificationRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function verify(EmailVerificationRequest $request)
@@ -66,7 +66,7 @@ class AuthController extends ApiController
     /**
      * Forgot password.
      *
-     * @param  App\Http\Requests\ForgotPasswordRequest  $request
+     * @param  \App\Http\Requests\ForgotPasswordRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function forgotPassword(ForgotPasswordRequest $request)
@@ -90,8 +90,7 @@ class AuthController extends ApiController
     /**
      * Update password reset.
      *
-     * @param  App\Http\Requests\
-     * \UpdatePasswordRequest  $request
+     * @param  \App\Http\Requests\UpdatePasswordRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function updatePassword(UpdatePasswordRequest $request)
