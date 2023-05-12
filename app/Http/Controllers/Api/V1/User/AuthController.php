@@ -3,22 +3,20 @@
 namespace App\Http\Controllers\Api\V1\User;
 
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\User\EmailVerificationRequest;
-use App\Http\Requests\User\ForgotPasswordRequest;
-use App\Http\Requests\User\LoginRequest;
-use App\Http\Requests\User\RegisterRequest;
-use App\Http\Requests\User\UpdatePasswordRequest;
-use App\Services\User\AuthServiceInterface;
+use App\Http\Requests\EmailVerificationRequest;
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdatePasswordRequest;
+use App\Services\AuthServiceInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class AuthController extends ApiController
 {
     private $authService;
 
     /**
-     * @param  \App\Services\User\AuthServiceInterface  $authService
+     * @param  \App\Services\AuthServiceInterface  $authService
      */
     public function __construct(AuthServiceInterface $authService)
     {
@@ -28,7 +26,7 @@ class AuthController extends ApiController
     /**
      * Register user.
      *
-     * @param  \App\Http\Requests\User\RegisterRequest  $request
+     * @param  \App\Http\Requests\RegisterRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(RegisterRequest $request): JsonResponse
@@ -54,7 +52,7 @@ class AuthController extends ApiController
     /**
      * Show the form for creating a new resource.
      *
-     * @param  App\Http\Requests\User\EmailVerificationRequest  $request
+     * @param  App\Http\Requests\EmailVerificationRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function verify(EmailVerificationRequest $request)
@@ -65,22 +63,9 @@ class AuthController extends ApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function send(Request $request)
-    {
-        $request->user()->sendEmailVerificationNotification();
-
-        $this->response(['status' => 'success', 'data' => [], 'message' => ''], Response::HTTP_OK);
-    }
-
-    /**
      * Forgot password.
      *
-     * @param  App\Http\Requests\User\ForgotPasswordRequest  $request
+     * @param  App\Http\Requests\ForgotPasswordRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function forgotPassword(ForgotPasswordRequest $request)
@@ -104,7 +89,8 @@ class AuthController extends ApiController
     /**
      * Update password reset.
      *
-     * @param  App\Http\Requests\User\UpdatePasswordRequest  $request
+     * @param  App\Http\Requests\
+     * \UpdatePasswordRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function updatePassword(UpdatePasswordRequest $request)

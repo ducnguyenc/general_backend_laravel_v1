@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ForgotPasswordRequest extends FormRequest
+class UpdatePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,9 @@ class ForgotPasswordRequest extends FormRequest
     public function rules()
     {
         return [
+            'token' => 'bail|required',
             'email' => 'bail|required|email',
+            'password' => 'bail|required|min:8|confirmed',
         ];
     }
 }

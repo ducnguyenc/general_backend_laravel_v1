@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\V1\User\AuthController;
+use App\Http\Controllers\Api\V1\Admin\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum', 'ability:user'])->group(function () {
+Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
     // verified
     Route::middleware(['verified'])->group(function () {
         Route::get('user', function () {

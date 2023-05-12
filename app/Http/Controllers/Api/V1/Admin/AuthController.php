@@ -3,28 +3,38 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Api\ApiController;
-use Illuminate\Http\Request;
+use App\Http\Requests\EmailVerificationRequest;
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdatePasswordRequest;
+use App\Models\User;
+use App\Services\AuthServiceInterface;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends ApiController
 {
+    private $authService;
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param  \App\Services\AuthServiceInterface  $authService
      */
-    public function index()
+    public function __construct(AuthServiceInterface $authService)
     {
-        //
+        $this->authService = $authService;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Register user.
      *
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\RegisterRequest  $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function create()
+    public function register(RegisterRequest $request): JsonResponse
     {
-        //
+        [$data, $status] = $this->authService->register($request->validated(), User::ROLE_ADMIN);
+
+        return $this->response($data, $status);
     }
 
     /**
@@ -33,53 +43,63 @@ class AuthController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function login(LoginRequest $request)
     {
-        //
+        [$data, $status] = $this->authService->login($request->validated(), User::ROLE_ADMIN);
+
+        return $this->response($data, $status);
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for creating a new resource.
      *
-     * @param  int  $id
+     * @param  App\Http\Requests\EmailVerificationRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function verify(EmailVerificationRequest $request)
     {
-        //
+        $request->fulfill();
+
+        return redirect()->to(env('APP_URL_FE') . config('const.uri_fe.login'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Forgot password.
      *
-     * @param  int  $id
+     * @param  App\Http\Requests\ForgotPasswordRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function forgotPassword(ForgotPasswordRequest $request)
     {
-        //
+        [$data, $status] = $this->authService->forgotPassword($request->validated(), User::ROLE_ADMIN);
+
+        return $this->response($data, $status);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Reset password.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  string  $token
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function resetPassword(string $token)
     {
-        //
+        return redirect(sprintf('%s%s/%s', env('APP_URL_FE'), config('const.uri_fe.reset-password'), $token));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Update password reset.
      *
-     * @param  int  $id
+     * @param  App\Http\Requests\
+     * \UpdatePasswordRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function updatePassword(UpdatePasswordRequest $request)
     {
-        //
+        [$data, $status] = $this->authService->updatePassword(
+            $request->only('email', 'password', 'password_confirmation', 'token'), User::ROLE_ADMIN
+        );
+
+        return $this->response($data, $status);
     }
 }

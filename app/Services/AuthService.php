@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Services\User;
+namespace App\Services;
 
 use App\Models\User;
 use App\Repositories\UserRepositoryInterface;
-use App\Services\BaseService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Response;
@@ -32,7 +31,7 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @param  array  $params
      * @return array
      */
-    public function register(array $params): array
+    public function register(array $params, int $role = User::ROLE_USER_V0): array
     {
         DB::beginTransaction();
         try {
@@ -42,6 +41,7 @@ class AuthService extends BaseService implements AuthServiceInterface
                     'name' => $params['name'],
                     'email' => $params['email'],
                     'password' => Hash::make($params['password']),
+                    'role' => $role ?? User::ROLE_USER_V0,
                 ]
             );
             event(new Registered($user));
@@ -63,14 +63,15 @@ class AuthService extends BaseService implements AuthServiceInterface
      * @param  array  $params
      * @return array
      */
-    public function login(array $params): array
+    public function login(array $params, int $role = User::ROLE_USER_V0): array
     {
+        $params['role'] = $role;
         if (Auth::attempt($params)) {
             if (!isset(Auth::user()->email_verified_at)) {
                 return $this->response(Response::HTTP_UNAUTHORIZED, [], config('messages.error.verify_email'));
             }
 
-            $accessToken = Auth::user()->createToken($params['email'], [User::ABILITY])->plainTextToken;
+            $accessToken = Auth::user()->createToken($params['email'], [$role ?? User::ABILITY_USER])->plainTextToken;
 
             return $this->response(Response::HTTP_OK, [
                 'access_token' => $accessToken,
@@ -80,24 +81,45 @@ class AuthService extends BaseService implements AuthServiceInterface
         return $this->response(Response::HTTP_NOT_FOUND, [], config('messages.error.login'));
     }
 
-    public function forgotPassword(array $params): array
+    /**
+     * Forgot password.
+     * 
+     * @param array $params
+     * @param int $role
+     * 
+     * @return array
+     */
+    public function forgotPassword(array $params, int $role = User::ROLE_USER_V0): array
     {
-        $user = User::where('email', $params['email'])->first();
+        $user = User::query()->where([
+            'email' => $params['email'],
+            'role' => $role,
+        ])->first();
         if (!isset($user->email_verified_at)) {
             $this->response(Response::HTTP_OK, [], 'email not verified yet');
         }
 
-        $status = Password::sendResetLink(
-            ['email' => $params['email']]
-        );
+        $status = Password::sendResetLink([
+            'email' => $params['email'],
+            'role' => $role,
+        ]);
 
         return $status === Password::RESET_LINK_SENT
             ? $this->response(Response::HTTP_OK, [], $status)
             : $this->response(Response::HTTP_NOT_FOUND, [], $status);
     }
 
-    public function updatePassword(array $params)
+    /**
+     * Update password.
+     * 
+     * @param array $params
+     * @param int $role
+     * 
+     * @return array
+     */
+    public function updatePassword(array $params, int $role = User::ROLE_USER_V0): array
     {
+        $params['role'] = $role;
         $status = Password::reset(
             $params,
             function ($user, $password) {
