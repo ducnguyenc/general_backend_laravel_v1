@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'bail|required|max:255',
             'email' => ['bail', 'required', 'email', 'max:255', function ($attribute, $value, $fail) {
-                $isUser = User::where($attribute, $value)->whereNotNull('email_verified_at')->exists();
+                $isUser = User::where($attribute, $value)->whereIn('role', User::ARR_ROLE_USER)->whereNotNull('email_verified_at')->exists();
                 if ($isUser) {
                     $fail(trans('validation.unique', ['attribute' => $attribute]));
                 }

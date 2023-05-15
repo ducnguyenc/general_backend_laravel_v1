@@ -22,6 +22,16 @@ class User extends Authenticatable implements MustVerifyEmail
     const ROLE_USER_V0 = 2;
     const ROLE_USER_V1 = 3;
 
+    const ARR_ROLE_ADMIN = [
+        self::ROLE_SUPPER_ADMIN,
+        self::ROLE_ADMIN,
+    ];
+
+    const ARR_ROLE_USER = [
+        self::ROLE_USER_V0,
+        self::ROLE_USER_V1,
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
