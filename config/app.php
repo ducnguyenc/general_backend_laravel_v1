@@ -185,6 +185,10 @@ return [
         /*
          * Package Service Providers...
          */
+        // Modules\Auth\Sanctum\App\AppServiceProvider::class,
+        // Modules\Auth\JWT\App\AppServiceProvider::class,
+        // Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        Modules\Auth\Passport\App\AppServiceProvider::class,
 
         /*
          * Application Service Providers...

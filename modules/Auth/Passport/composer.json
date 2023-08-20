@@ -1,0 +1,16 @@
+{
+    "name": "auth/jwt",
+    "autoload": {
+        "psr-4": {
+            "Auth\\Jwt\\": "App/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ducnc"
+        }
+    ],
+    "require": {
+        "laravel/passport": "^11.8"
+    }
+}
