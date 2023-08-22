@@ -7,7 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    /**b
+    /**a
      * Define the application's command schedule.
      *b
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
