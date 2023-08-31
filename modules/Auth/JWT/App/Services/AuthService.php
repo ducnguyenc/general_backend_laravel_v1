@@ -2,6 +2,7 @@
 
 namespace Modules\Auth\JWT\App\Services;
 
+use Illuminate\Http\Response;
 use Modules\Auth\JWT\App\Repositories\AuthRepositoryInterface;
 
 class AuthService implements AuthServiceInterface
@@ -15,11 +16,35 @@ class AuthService implements AuthServiceInterface
 
     public function register(array $request)
     {
+        $request['password'] = bcrypt($request['password']);
+        $user = $this->authRepo->create($request);
+
         return [
-            200,
+            Response::HTTP_OK,
             [
                 'status' => 'success',
-                'data' =>  $this->authRepo->create($request)
+                'data' => compact('user'),
+            ]
+        ];
+    }
+
+    public function login(array $request)
+    {
+        if (!$token = auth('api')->attempt($request)) {
+            return [
+                Response::HTTP_OK,
+                [
+                    'status' => 'success',
+                    'data' => compact('token'),
+                ]
+            ];
+        }
+
+        return [
+            Response::HTTP_OK,
+            [
+                'status' => 'success',
+                'data' => compact('token'),
             ]
         ];
     }

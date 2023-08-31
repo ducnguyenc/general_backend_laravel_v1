@@ -20,9 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('register', 'register');
-    Route::get('email/verify/{id}/{hash}', 'verify')->middleware('signed')->name('verification.verify');
-    Route::post('login', 'login');
-    Route::post('forgot-password', 'forgotPassword')->name('password.email');
-    Route::post('reset-password', 'updatePassword')->name('password.update');
+    Route::post('/register', 'register');
+    Route::get('/email/verify/{id}/{hash}', 'verify')->middleware('signed')->name('verification.verify');
+    Route::post('/login', 'login');
+    Route::post('/forgot-password', 'forgotPassword')->name('password.email');
+    Route::post('/reset-password', 'updatePassword')->name('password.update');
 });
