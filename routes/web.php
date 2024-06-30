@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $b = Storage::get('DDD.txt');
+    return view('a', ['b' => $b]);
 });
